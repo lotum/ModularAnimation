@@ -1,12 +1,72 @@
 # ModularAnimation
 A small framework that seperates the playback and the animation description from the (UIView-)animation itself.
 
-UIView.animate() has some drawbacks:
-- It starts the animation immediately when called.
-- Chaining several animations looks messy.
-- The overall structure of the animation (or its description) cannot be reused.
+ModularAnimation gets rid of the drawbacks of UIView.animate():
+- Your animation code will be easy to understand
+- You will be able to reuse your animation description on different views
 
-ModularAnimation provides a few simple classes to compose UIView animations that can be played back if you call play().
-And it provides an enum to describe complex animations that can be reused on different views.
-All in all your animation code will be a lot easier to understand.
+## Usage
+### the oldfashioned way
+```swift
+let object = UIView()
+    
+UIView.animate(
+    withDuration: 0,
+    delay: 0,
+    options: [],
+    animations: {
+        object.transform.scaledBy(x: 2, y: 2)
+},
+    completion: { _ in
+        UIView.animate(
+            withDuration: 0.25,
+            delay: 0,
+            usingSpringWithDamping: 0.8,
+            initialSpringVelocity: 4,
+            options: [],
+            animations: {
+                object.transform = .identity
+        },
+            completion: { _ in
+               UIView.animate(
+                    withDuration: 0.4,
+                    delay: 0.25,
+                    options: [],
+                    animations: {
+                        object.alpha = 0
+                        object.transform.scaledBy(x: 5, y: 0.1)
+                },
+                    completion: nil
+                )
+        }
+        )
+    }
+)
+```
+
+### Seperate the playback with ModularAnimation
+```swift
+let object = UIView()
+
+let scaleUp = BasicAnimationModule(duration: 0) {
+    object.transform.scaledBy(x: 2, y: 2)
+}
+let scaleBack = SpringAnimationModule(duration: 0.25, dampingRatio: 0.8, velocity: 4) {
+    object.transform = .identity
+}
+let fadeOutAndSqueeze = BasicAnimationModule(duration: 0.4, delay: 0.25) {
+    object.alpha = 0
+    object.transform.scaledBy(x: 5, y: 0.1)
+}
+
+// you can do this (similar to before)
+scaleUp.play() { _ in
+    scaleBack.play() { _ in
+        fadeOutAndSqueeze.play()
+    }
+}
+
+// or this to get rid of the completion blocks
+let serial = SerialAnimation(scaleUp, scaleBack, fadeOutAndSqueeze)
+serial.play()
 
