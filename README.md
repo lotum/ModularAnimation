@@ -79,8 +79,8 @@ serial.play()
 ```swift
 let description = AnimationAction.serial(
     .scaleEqually(scale: 2),
-    .springTransformBack(duration: 0.25),
     .delay(duration: 0.4),
+    .springTransformBack(duration: 0.25),
     .parallel(
         .fadeOut(duration: 0.4),
         .scale(x: 5, y: 0.1, duration: 0.4)
@@ -102,8 +102,8 @@ let object = UIView()
 object
     .animateSerial(
         .scaleEqually(scale: 2),
-        .springTransformBack(duration: 0.25),
         .delay(duration: 0.4),
+        .springTransformBack(duration: 0.25),
         .parallel(
             .fadeOut(duration: 0.4),
             .scale(x: 5, y: 0.1, duration: 0.4)
