@@ -5,6 +5,66 @@ ModularAnimation gets rid of the drawbacks of UIView.animate():
 - Your animation code will be easy to understand
 - You will be able to reuse your animation description on different views
 
+## tl;dr ##
+You can write this
+```swift
+let description = AnimationAction.serial(
+    .scaleEqually(scale: 2),
+    .delay(duration: 0.4),
+    .springTransformBack(duration: 0.25),
+    .parallel(
+        .fadeOut(duration: 0.4),
+        .scale(x: 5, y: 0.1, duration: 0.4)
+    )
+)
+
+// use same description on different views and playback when you like to do it
+let object1 = UIView()
+let object2 = UIView()
+
+object1.animation(description).play()
+object2.animation(description).play()
+```
+
+instead of this
+```swift
+let object = UIView()
+    
+UIView.animate(
+    withDuration: 0,
+    delay: 0,
+    options: [],
+    animations: {
+        object.transform.scaledBy(x: 2, y: 2)
+},
+    completion: { _ in
+        UIView.animate(
+            withDuration: 0.25,
+            delay: 0.25,
+            usingSpringWithDamping: 0.8,
+            initialSpringVelocity: 4,
+            options: [],
+            animations: {
+                object.transform = .identity
+        },
+            completion: { _ in
+               UIView.animate(
+                    withDuration: 0.4,
+                    delay: 0,
+                    options: [],
+                    animations: {
+                        object.alpha = 0
+                        object.transform.scaledBy(x: 5, y: 0.1)
+                },
+                    completion: nil
+                )
+        }
+        )
+    }
+)
+```
+
+
 ## Usage
 ### the oldfashioned way
 ```swift
