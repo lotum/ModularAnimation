@@ -100,7 +100,7 @@ All in all you can write this compact and easy to grasp animation code for the v
 let object = UIView()
 
 object
-    .animateSerial(
+    .serialAnimation(
         .scaleEqually(scale: 2),
         .delay(duration: 0.4),
         .springTransformBack(duration: 0.25),
