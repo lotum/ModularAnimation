@@ -66,44 +66,6 @@ UIView.animate(
 
 
 ## Usage
-### the oldfashioned way
-```swift
-let object = UIView()
-    
-UIView.animate(
-    withDuration: 0,
-    delay: 0,
-    options: [],
-    animations: {
-        object.transform.scaledBy(x: 2, y: 2)
-},
-    completion: { _ in
-        UIView.animate(
-            withDuration: 0.25,
-            delay: 0.25,
-            usingSpringWithDamping: 0.8,
-            initialSpringVelocity: 4,
-            options: [],
-            animations: {
-                object.transform = .identity
-        },
-            completion: { _ in
-               UIView.animate(
-                    withDuration: 0.4,
-                    delay: 0,
-                    options: [],
-                    animations: {
-                        object.alpha = 0
-                        object.transform.scaledBy(x: 5, y: 0.1)
-                },
-                    completion: nil
-                )
-        }
-        )
-    }
-)
-```
-
 ### Seperate the playback with ModularAnimation
 ```swift
 let object = UIView()
@@ -170,3 +132,20 @@ object
         )
     ).play()
 ```
+
+## Requirements
+
+Swift 3.1
+
+## Installation
+
+ModularAnimation is available through [CocoaPods](http://cocoapods.org). To install
+it, simply add the following line to your Podfile:
+
+```ruby
+pod "ModularAnimation"
+```
+
+## License
+
+ModularAnimation is available under the Apache license. See the LICENSE file for more info.
